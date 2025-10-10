@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { userAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router";
 
 const Root = () => {
-  const { user } = userAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
