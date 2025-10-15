@@ -16,14 +16,23 @@ const Categories = () => {
           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
         },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setCategories(response.data.categories);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(error.response.data.message);
+      } else {
+        alert("Internal server error");
+      }
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -205,21 +214,19 @@ const Categories = () => {
                     <td className="border border-gray-200 p-2">
                       {category.categoryName}
                     </td>
-                    <td className="border border-gray-200 p-2">
-                      <div className="flex justify-evenly ">
-                        <button
-                          className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-300"
-                          onClick={() => handleEdit(category)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-300"
-                          onClick={() => hanleDelete(category._id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
+                    <td className="border border-gray-200 p-2 flex gap-2 justify-center">
+                      <button
+                        className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-300"
+                        onClick={() => handleEdit(category)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-300"
+                        onClick={() => hanleDelete(category._id)}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

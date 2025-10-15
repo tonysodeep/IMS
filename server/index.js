@@ -3,6 +3,7 @@ import cors from "cors";
 import connectDB from "./db/connections.js";
 import authRouter from "./routes/auth.js";
 import categoryRouter from "./routes/category.js";
+import supplierRouter from "./routes/supplier.js";
 
 const port = process.env.PORT;
 const app = express();
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/supplier", supplierRouter);
 
 app.listen(port, () => {
   connectDB();
