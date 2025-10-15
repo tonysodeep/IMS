@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const Suppliers = () => {
   const [addEditSupplier, setAddEditSupplier] = useState(null);
@@ -10,9 +10,16 @@ const Suppliers = () => {
     supplierPhoneNumber: "",
     supplierAddress: "",
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
+
+  const filteredSuppliers = useMemo(() => {
+    const term = (searchTerm || "").trim().toLowerCase();
+    if (!term) return suppliers;
+    return suppliers.filter((s) => (s.name || "").toLowerCase().includes(term));
+  }, [suppliers, searchTerm]);
 
   const hanleChange = (e) => {
     const { name, value } = e.target;
@@ -107,7 +114,7 @@ const Suppliers = () => {
           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
         },
       });
-      console.log(`REponse data ${JSON.stringify(response.data)}`);
+      // console.log(`REponse data ${JSON.stringify(response)}`);
       setSuppliers(response.data.suppliers);
     } catch (error) {
       if (
@@ -188,6 +195,10 @@ const Suppliers = () => {
     }
   };
 
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+
   return (
     <div className="w-full h-full flex flex-col gap-4 p-4">
       <h1 className="text-2xl font-bold">Supplier Management</h1>
@@ -195,7 +206,10 @@ const Suppliers = () => {
         <input
           type="text"
           placeholder="Search Supplier..."
+          value={searchTerm}
           className="border p-1 bg-white rounded px-4"
+          name="searchTerm"
+          onChange={(e) => handleSearchChange(e.target.value)}
         />
         <button
           className="px-4 py-1.5 bg-blue-500 text-white rounded cursor-pointer"
@@ -219,33 +233,48 @@ const Suppliers = () => {
             </tr>
           </thead>
           <tbody>
-            {suppliers.map((supplier, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 p-2">{++index}</td>
-                <td className="border border-gray-300 p-2">{supplier.name}</td>
-                <td className="border border-gray-300 p-2">{supplier.email}</td>
-                <td className="border border-gray-300 p-2">
-                  {supplier.phoneNumber}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {supplier.address}
-                </td>
-                <td className="border border-gray-300 p-2 flex gap-2 justify-center">
-                  <button
-                    className="px-2 py-1 bg-yellow-500 text-white rounded cursor-pointer"
-                    onClick={() => handleEditSupplier(supplier)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="px-2 py-1 bg-red-500 text-white rounded cursor-pointer"
-                    onClick={() => handleDelete(supplier._id)}
-                  >
-                    Delete
-                  </button>
+            {filteredSuppliers.length > 0 ? (
+              filteredSuppliers.map((supplier, index) => (
+                <tr key={supplier._id || index}>
+                  <td className="border border-gray-300 p-2">{index + 1}</td>
+                  <td className="border border-gray-300 p-2">
+                    {supplier.name}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {supplier.email}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {supplier.phoneNumber}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {supplier.address}
+                  </td>
+                  <td className="border border-gray-300 p-2 flex gap-2 justify-center">
+                    <button
+                      className="px-2 py-1 bg-yellow-500 text-white rounded cursor-pointer"
+                      onClick={() => handleEditSupplier(supplier)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="px-2 py-1 bg-red-500 text-white rounded cursor-pointer"
+                      onClick={() => handleDelete(supplier._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  className="border border-gray-300 p-2 text-center"
+                  colSpan={6}
+                >
+                  No supplier found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       )}
