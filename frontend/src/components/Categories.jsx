@@ -1,41 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useData } from "../context/DataContext.jsx";
 
 const Categories = () => {
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { categories, fetchCategories, loadingCategories } = useData();
+  const [loading, setLoading] = useState(loadingCategories);
   const [edittedCategory, setEdittedCategory] = useState(null);
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("http://localhost:25569/api/category/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
-        },
-      });
-      // console.log(response.data);
-      setCategories(response.data.categories);
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        alert(error.response.data.message);
-      } else {
-        alert("Internal server error");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // use categories and fetchCategories from context
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    setLoading(loadingCategories);
+  }, [loadingCategories]);
 
   const handelSubmit = async (e) => {
     e.preventDefault();
@@ -209,8 +186,8 @@ const Categories = () => {
               </thead>
               <tbody>
                 {categories.map((category, index) => (
-                  <tr key={index}>
-                    <td className="border border-gray-200 p-2">{++index}</td>
+                  <tr key={category._id || index}>
+                    <td className="border border-gray-200 p-2">{index + 1}</td>
                     <td className="border border-gray-200 p-2">
                       {category.categoryName}
                     </td>

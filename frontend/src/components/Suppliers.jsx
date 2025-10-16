@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
+import { useData } from "../context/DataContext.jsx";
 
 const Suppliers = () => {
   const [addEditSupplier, setAddEditSupplier] = useState(null);
@@ -13,7 +14,7 @@ const Suppliers = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [suppliers, setSuppliers] = useState([]);
+  const { suppliers, fetchSuppliers, loadingSuppliers } = useData();
 
   const filteredSuppliers = useMemo(() => {
     const term = (searchTerm || "").trim().toLowerCase();
@@ -106,34 +107,11 @@ const Suppliers = () => {
     }
   };
 
-  const fetchSuppliers = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("http://localhost:25569/api/supplier/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
-        },
-      });
-      // console.log(`REponse data ${JSON.stringify(response)}`);
-      setSuppliers(response.data.suppliers);
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        alert(error.response.data.message);
-      } else {
-        alert("Internal server error");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchSuppliers();
-  }, []);
+    // sync component loading with data context
+    setLoading(loadingSuppliers);
+    // ensure filteredSuppliers recalculates from context suppliers via useMemo
+  }, [loadingSuppliers, suppliers]);
 
   const handleEditSupplier = (supplier) => {
     setFormData({

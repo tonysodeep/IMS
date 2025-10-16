@@ -6,6 +6,7 @@ import ProtectedRoutes from "./ultis/ProtectedRoutes";
 import Dashboard from "./pages/Dashboard";
 import Categories from "./components/Categories";
 import Suppliers from "./components/Suppliers";
+import Products from "./components/Products";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         >
           <Route index element={<h1> Summary dasboardk</h1>}></Route>
           <Route path="categories" element={<Categories />}></Route>
-          <Route path="products" element={<h1> Product dashboard</h1>}></Route>
+          <Route path="products" element={<Products />}></Route>
           <Route path="suppliers" element={<Suppliers />}></Route>
           <Route path="orders" element={<h1> Categories dashboard</h1>}></Route>
           <Route path="users" element={<h1> Categories dashboard</h1>}></Route>
