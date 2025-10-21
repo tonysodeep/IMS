@@ -6,12 +6,12 @@ const ProductSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   stock: { type: Number, required: true },
   isDeleted: { type: Boolean, default: false },
-  categoryId: {
+  category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
   },
-  supplierId: {
+  supplier: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Supplier",
     required: true,

@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --env-file=.env index.js"
+    "start": "nodemon --env-file=.env index.js",
+    "migrate:rename-product-fields": "node ../infra-db/migrate-rename-product-fields.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

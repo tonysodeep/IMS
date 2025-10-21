@@ -160,8 +160,8 @@ const Products = () => {
       productDescription: product.description,
       productPrice: product.price,
       productStock: product.stock,
-      category: product.categoryId._id,
-      supplier: product.supplierId._id,
+      category: product.category._id,
+      supplier: product.supplier._id,
     });
   };
 
@@ -198,7 +198,7 @@ const Products = () => {
       <div className="flex justify-between items-center">
         <input
           type="text"
-          placeholder="Search Supplier..."
+          placeholder="Search Product..."
           value={searchTerm}
           className="border p-1 bg-white rounded px-4"
           name="searchTerm"
@@ -235,10 +235,10 @@ const Products = () => {
                   <td className="border border-gray-300 p-2">{index + 1}</td>
                   <td className="border border-gray-300 p-2">{product.name}</td>
                   <td className="border border-gray-300 p-2">
-                    {product.categoryId.categoryName}
+                    {product.category.categoryName}
                   </td>
                   <td className="border border-gray-300 p-2">
-                    {product.supplierId.name}
+                    {product.supplier.name}
                   </td>
                   <td className="border border-gray-300 p-2">
                     {product.price}

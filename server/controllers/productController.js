@@ -5,8 +5,8 @@ import SupplierModel from "../models/Supplier.js";
 const getProduct = async (req, res) => {
   try {
     const products = await ProductModel.find({ isDeleted: false })
-      .populate("categoryId")
-      .populate("supplierId");
+      .populate("category")
+      .populate("supplier");
     const suppliers = await SupplierModel.find();
     const categories = await CategoryModel.find();
     return res
@@ -38,8 +38,8 @@ const addProduct = async (req, res) => {
       description: productDescription,
       price: productPrice,
       stock: productStock,
-      categoryId: category,
-      supplierId: supplier,
+      category: category,
+      supplier: supplier,
     });
     await newProduct.save();
     return res.status(201).json({
@@ -80,8 +80,8 @@ const updateProduct = async (req, res) => {
         description: productDescription,
         price: productPrice,
         stock: productStock,
-        categoryId: category,
-        supplierId: supplier,
+        category: category,
+        supplier: supplier,
       },
       { new: true }
     );
