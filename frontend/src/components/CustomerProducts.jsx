@@ -6,6 +6,14 @@ const CustomerProducts = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilterCategory, setSelectedFilterCategory] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [orderData, setOrderData] = useState({
+    productId: "",
+    quantity: 1,
+    total: 0,
+    stock: 0,
+    price: 0,
+  });
 
   const filteredProducts = useMemo(() => {
     const term = (searchTerm || "").trim().toLowerCase();
@@ -63,6 +71,76 @@ const CustomerProducts = () => {
 
   const handleChangeCategory = (value) => {
     setSelectedFilterCategory(value);
+  };
+
+  const handleProductOrder = (product) => {
+    setOrderData({
+      productId: product._id,
+      quantity: 1,
+      total: product.price,
+      stock: product.stock,
+      price: product.price,
+    });
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOrderData({
+      productId: "",
+      quantity: 1,
+      total: 0,
+      stock: 0,
+      price: 0,
+    });
+    setOpenModal(false);
+  };
+
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:25569/api/order/add",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setOpenModal(false);
+        setOrderData({
+          productId: "",
+          quantity: 1,
+          total: 0,
+          stock: 0,
+          price: 0,
+        });
+        alert(response.data.message);
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(error.response.data.message);
+      } else {
+        alert("Internal server error");
+      }
+    }
+  };
+
+  const increaseQuantity = (e) => {
+    if (e.target.value > orderData.stock) {
+      alert("not enought stock");
+    } else {
+      setOrderData({
+        ...orderData,
+        quantity: parseInt(e.target.value),
+        total: parseInt(e.target.value) * parseInt(orderData.price),
+      });
+    }
   };
 
   return (
@@ -142,7 +220,7 @@ const CustomerProducts = () => {
                   <td className="border border-gray-300 p-2 flex gap-2 justify-center">
                     <button
                       className="px-2 py-1 bg-green-500 text-white rounded cursor-pointer hover:bg-green-300"
-                      onClick={() => {}}
+                      onClick={() => handleProductOrder(product)}
                     >
                       Order
                     </button>
@@ -162,6 +240,41 @@ const CustomerProducts = () => {
           </tbody>
         </table>
       </div>
+      {openModal && (
+        <div className=" fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded shadow-md w-1/3 relative">
+            <h1 className="text-xl font-bold">Place Order</h1>
+            <button
+              className="absolute top-4 right-4 font-bold text-lg cursor-pointer"
+              onClick={handleCloseModal}
+            >
+              X
+            </button>
+            <form className="flex flex-col gap-4 mt-4" onSubmit={handelSubmit}>
+              <input
+                type="number"
+                placeholder="Increase Order Quantity"
+                className="border p-1 bg-white rounded px-4"
+                name="quantity"
+                onChange={(e) => {
+                  increaseQuantity(e);
+                }}
+                min="1"
+                value={orderData.quantity}
+              />
+
+              <p>{orderData.quantity * orderData.price}</p>
+
+              <button
+                className="w-full mt-2 bg-blue-500 text-white rounded-md p-3 cursor-pointer hover:bg-blue-300"
+                type="submit"
+              >
+                Place Order
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import Products from "./components/Products";
 import Logout from "./components/Logout";
 import User from "./components/User";
 import CustomerProducts from "./components/CustomerProducts";
+import CustomerOrder from "./components/CustomerOrder";
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
 
         <Route path="/customer-dashboard" element={<Dashboard />}>
           <Route index element={<CustomerProducts />}></Route>
+          <Route path="orders" element={<CustomerOrder />}></Route>
+          <Route path="logout" element={<Logout />}></Route>
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
