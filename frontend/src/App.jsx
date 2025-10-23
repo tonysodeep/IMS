@@ -12,6 +12,7 @@ import User from "./components/User";
 import CustomerProducts from "./components/CustomerProducts";
 import CustomerOrder from "./components/CustomerOrder";
 import Profile from "./components/Profile";
+import Summary from "./components/Summary";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             </ProtectedRoutes>
           }
         >
-          <Route index element={<h1> Summary dasboardk</h1>}></Route>
+          <Route index element={<Summary />}></Route>
           <Route path="categories" element={<Categories />}></Route>
           <Route path="products" element={<Products />}></Route>
           <Route path="suppliers" element={<Suppliers />}></Route>

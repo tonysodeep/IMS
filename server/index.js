@@ -7,6 +7,7 @@ import supplierRouter from "./routes/supplier.js";
 import productRouter from "./routes/product.js";
 import userRouter from "./routes/user.js";
 import orderRouter from "./routes/order.js";
+import dashboardRouter from "./routes/dashboard.js";
 
 const port = process.env.PORT;
 const app = express();
@@ -18,6 +19,7 @@ app.use("/api/supplier", supplierRouter);
 app.use("/api/product", productRouter);
 app.use("/api/user", userRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 app.listen(port, () => {
   connectDB();
