@@ -165,9 +165,10 @@ const Suppliers = () => {
         if (response.data.success) {
           alert("Supplier deleted successfully");
           fetchSuppliers();
+        } else {
+          alert(response.data.message);
         }
       } catch (error) {
-        console.error("Error deleting supplier:", error);
         alert(error.response?.data?.message || "Internal server error");
       }
     }

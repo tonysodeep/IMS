@@ -104,9 +104,10 @@ const Categories = () => {
         if (response.data.success) {
           alert("Category deleted successfully");
           fetchCategories();
+        } else {
+          alert(response.data.message);
         }
       } catch (error) {
-        console.error("Error deleting category:", error);
         alert(error.response?.data?.message || "Internal server error");
       }
     }
