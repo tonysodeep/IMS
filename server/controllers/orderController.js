@@ -42,13 +42,12 @@ const addOrder = async (req, res) => {
 
 const getOrder = async (req, res) => {
   try {
-    console.log('run here....')
     const userId = req.user._id;
     let query = {};
     if (req.user.role === "customer") {
       query = { customer: userId };
     }
-    const orders = await OrderModel.find()
+    const orders = await OrderModel.find(query)
       .populate({
         path: "product",
         populate: { path: "category", select: "categoryName" },
