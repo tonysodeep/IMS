@@ -11,6 +11,7 @@ import Logout from "./components/Logout";
 import User from "./components/User";
 import CustomerProducts from "./components/CustomerProducts";
 import CustomerOrder from "./components/CustomerOrder";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route index element={<CustomerProducts />}></Route>
           <Route path="orders" element={<CustomerOrder />}></Route>
           <Route path="logout" element={<Logout />}></Route>
+          <Route path="profile" element={<Profile />}></Route>
         </Route>
 
         <Route path="/login" element={<LoginPage />} />

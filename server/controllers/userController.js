@@ -74,4 +74,57 @@ const deleteUser = async (req, res) => {
   }
 };
 
-export { addUser, getUsers, deleteUser };
+const getUser = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error in user retrieval",
+    });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { name, email, address, password } = req.body;
+
+    const updateData = { name, email, address };
+    if (password && password.trim() != "") {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-password");
+
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "User profile Update successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error in Update User Profile",
+    });
+  }
+};
+
+export { addUser, getUsers, deleteUser, getUser, updateUserProfile };
