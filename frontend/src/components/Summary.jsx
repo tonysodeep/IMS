@@ -24,7 +24,7 @@ const Summary = () => {
           },
         }
       );
-      console.log(`outOfStock ${JSON.stringify(response.data)}`);
+      // console.log(`outOfStock ${JSON.stringify(response.data)}`);
       setDashboardData(response.data.dashboardData);
     } catch (error) {
       if (
@@ -43,7 +43,7 @@ const Summary = () => {
 
   useEffect(() => {
     fetchDashboardData();
-    console.log(`dashboardData ${JSON.stringify(dashboardData)}`);
+    // console.log(`dashboardData ${JSON.stringify(dashboardData)}`);
   }, []);
 
   if (loading) {

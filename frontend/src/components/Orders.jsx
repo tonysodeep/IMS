@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const CustomerOrder = () => {
+const Orders = () => {
   const [orders, setOrders] = useState([]);
 
   const fetchOrder = async () => {
@@ -11,7 +11,7 @@ const CustomerOrder = () => {
           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
         },
       });
-      console.log(`Order json data ${JSON.stringify(respone.data.orders[0])}`);
+      // console.log(`Order json data ${JSON.stringify(respone.data)}`);
       if (respone.data.success) {
         setOrders(respone.data.orders);
       } else {
@@ -89,4 +89,4 @@ const CustomerOrder = () => {
   );
 };
 
-export default CustomerOrder;
+export default Orders;

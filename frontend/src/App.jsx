@@ -10,7 +10,7 @@ import Products from "./components/Products";
 import Logout from "./components/Logout";
 import User from "./components/User";
 import CustomerProducts from "./components/CustomerProducts";
-import CustomerOrder from "./components/CustomerOrder";
+import Orders from "./components/Orders";
 import Profile from "./components/Profile";
 import Summary from "./components/Summary";
 
@@ -31,14 +31,14 @@ function App() {
           <Route path="categories" element={<Categories />}></Route>
           <Route path="products" element={<Products />}></Route>
           <Route path="suppliers" element={<Suppliers />}></Route>
-          <Route path="orders" element={<h1> Categories dashboard</h1>}></Route>
+          <Route path="orders" element={<Orders />}></Route>
           <Route path="users" element={<User />}></Route>
           <Route path="logout" element={<Logout />}></Route>
         </Route>
 
         <Route path="/customer-dashboard" element={<Dashboard />}>
           <Route index element={<CustomerProducts />}></Route>
-          <Route path="orders" element={<CustomerOrder />}></Route>
+          <Route path="orders" element={<Orders />}></Route>
           <Route path="logout" element={<Logout />}></Route>
           <Route path="profile" element={<Profile />}></Route>
         </Route>
