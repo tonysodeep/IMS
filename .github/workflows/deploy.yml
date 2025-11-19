@@ -1,0 +1,49 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main # This workflow runs when code is merged into the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy and Restart Services
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          # The entire deployment process is run over SSH
+          ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST '
+            # 1. Navigate to the application root directory
+            cd /home/'"$SSH_USER"'/IMS
+
+            # 2. Pull the latest code from the main branch
+            git pull origin main
+
+            # 3. Rebuild and Restart Frontend (React/Vite)
+            echo "--- Deploying Frontend ---"
+            cd frontend
+            npm install # Install any new dependencies
+            npm run build # Re-create the production build
+            pm2 restart web-frontend # Restart the PM2 process
+            cd ..
+
+            # 4. Reinstall and Restart Server (REST API)
+            echo "--- Deploying Server ---"
+            cd server
+            npm install # Install any new dependencies
+            pm2 restart api-server # Restart the PM2 process
+          '
+
+      - name: Deployment Success
+        run: echo "Deployment complete. Services are running on http://103.56.161.69:5173 (Frontend) and 103.56.161.69:25569 (Server)."
