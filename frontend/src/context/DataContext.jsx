@@ -35,7 +35,7 @@ export const DataProvider = ({ children }) => {
     setLoadingSuppliers(true);
     try {
       const res = await axios.get(
-        `${process.env.HOST_URL}/api/supplier/`,
+        `${import.meta.env.VITE_BASE_URL}/api/supplier/`,
         getAuthHeaders()
       );
       setSuppliers(res.data.suppliers || []);
