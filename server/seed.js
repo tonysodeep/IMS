@@ -15,6 +15,7 @@ const register = async () => {
     });
     await newUser.save();
     console.log("Admin user create successfully");
+    process.exit();
   } catch (error) {
     console.log(`Admin user create fail ${error}`);
   }
