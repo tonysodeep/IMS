@@ -23,7 +23,7 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
           # The entire deployment process is run over SSH
-          ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST '
+          ssh -o StrictHostKeyChecking=no -p 24700 $SSH_USER@$SSH_HOST '
             # 1. Navigate to the application root directory
             cd /home/'"$SSH_USER"'/IMS
 
