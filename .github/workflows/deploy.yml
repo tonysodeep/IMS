@@ -42,7 +42,7 @@ jobs:
             echo "--- Deploying Server ---"
             cd server
             npm install # Install any new dependencies
-            pm2 restart api-server # Restart the PM2 process
+            pm2 restart ecosystem.config.cjs # Restart the PM2 process
           '
 
       - name: Deployment Success
