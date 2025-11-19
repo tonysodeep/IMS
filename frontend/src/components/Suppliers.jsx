@@ -71,7 +71,7 @@ const Suppliers = () => {
     } else {
       try {
         const reponse = await axios.post(
-          "http://localhost:25569/api/supplier/add",
+          `${import.meta.env.VITE_BASE_URL}/api/supplier/add`,
           formData,
           {
             headers: {

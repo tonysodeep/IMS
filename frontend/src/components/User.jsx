@@ -27,7 +27,7 @@ const User = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const respone = await axios.get("http://localhost:25569/api/user/", {
+      const respone = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/user/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
         },
@@ -56,7 +56,7 @@ const User = () => {
     e.preventDefault();
     try {
       const reponse = await axios.post(
-        "http://localhost:25569/api/user/add",
+        `${import.meta.env.VITE_BASE_URL}/api/user/add`,
         formData,
         {
           headers: {

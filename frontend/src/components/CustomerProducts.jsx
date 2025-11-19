@@ -36,7 +36,7 @@ const CustomerProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const respone = await axios.get("http://localhost:25569/api/product/", {
+      const respone = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/product/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
         },
@@ -99,7 +99,7 @@ const CustomerProducts = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:25569/api/order/add",
+        `${import.meta.env.VITE_BASE_URL}/api/order/add`,
         orderData,
         {
           headers: {

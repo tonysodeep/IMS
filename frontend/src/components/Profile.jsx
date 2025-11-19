@@ -14,7 +14,7 @@ const Profile = () => {
   const fetchUser = async () => {
     try {
       const respone = await axios.get(
-        "http://localhost:25569/api/user/profile",
+        `${import.meta.env.VITE_BASE_URL}/api/user/profile`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
@@ -51,7 +51,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       const reponse = await axios.put(
-        "http://localhost:25569/api/user/profile",
+        `${import.meta.env.VITE_BASE_URL}/api/user/profile`,
         user,
         {
           headers: {

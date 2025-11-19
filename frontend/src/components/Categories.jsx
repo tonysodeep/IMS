@@ -55,7 +55,7 @@ const Categories = () => {
     } else {
       try {
         const reponse = await axios.post(
-          "http://localhost:25569/api/category/add",
+          `${import.meta.env.VITE_BASE_URL}/api/category/add`,
           {
             categoryName,
             categoryDescription,

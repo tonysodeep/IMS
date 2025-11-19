@@ -19,7 +19,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:25569/api/auth/login",
+        `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
         {
           email,
           password,

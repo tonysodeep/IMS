@@ -17,7 +17,7 @@ const Summary = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:25569/api/dashboard/",
+        `${import.meta.env.VITE_BASE_URL}/api/dashboard/`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("pos-token")}`,

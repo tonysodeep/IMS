@@ -6,7 +6,7 @@ const Orders = () => {
 
   const fetchOrder = async () => {
     try {
-      const respone = await axios.get("http://localhost:25569/api/order/", {
+      const respone = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/order/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
         },

@@ -20,7 +20,7 @@ export const DataProvider = ({ children }) => {
     setLoadingCategories(true);
     try {
       const res = await axios.get(
-        "http://localhost:25569/api/category/",
+        `${import.meta.env.VITE_BASE_URL}/api/category/`,
         getAuthHeaders()
       );
       setCategories(res.data.categories || []);
@@ -35,7 +35,7 @@ export const DataProvider = ({ children }) => {
     setLoadingSuppliers(true);
     try {
       const res = await axios.get(
-        "http://localhost:25569/api/supplier/",
+        `${process.env.HOST_URL}/api/supplier/`,
         getAuthHeaders()
       );
       setSuppliers(res.data.suppliers || []);
