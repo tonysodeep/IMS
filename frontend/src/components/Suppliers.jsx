@@ -155,7 +155,7 @@ const Suppliers = () => {
     if (window.confirm("Are you sure you want to delete this Supplier?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:25569/api/supplier/${supplierId}`,
+          `${import.meta.env.VITE_BASE_URL}/api/supplier/${supplierId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
