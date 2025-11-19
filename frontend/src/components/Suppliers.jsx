@@ -35,7 +35,7 @@ const Suppliers = () => {
     if (isEditMode) {
       try {
         const reponse = await axios.put(
-          `http://localhost:25569/api/supplier/${addEditSupplier}`,
+          `${import.meta.env.VITE_BASE_URL}/api/supplier/${addEditSupplier}`,
           formData,
           {
             headers: {
