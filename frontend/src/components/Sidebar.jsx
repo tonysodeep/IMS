@@ -10,7 +10,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 
 const Sidebar = () => {
   const menuItems = [
@@ -19,24 +19,6 @@ const Sidebar = () => {
       path: "/admin-dashboard",
       icon: <FaHome />,
       isParent: true,
-    },
-    {
-      name: "Categories",
-      path: "/admin-dashboard/categories",
-      icon: <FaTable />,
-      isParent: false,
-    },
-    {
-      name: "Products",
-      path: "/admin-dashboard/products",
-      icon: <FaBox />,
-      isParent: false,
-    },
-    {
-      name: "Suppliers",
-      path: "/admin-dashboard/suppliers",
-      icon: <FaTruck />,
-      isParent: false,
     },
     {
       name: "Orders",
@@ -90,14 +72,55 @@ const Sidebar = () => {
       isParent: false,
     },
   ];
+
+  const settingMenuItems = [
+    {
+      name: "Dashboard",
+      path: "/admin-dashboard",
+      icon: <FaHome />,
+      isParent: true,
+    },
+    {
+      name: "Categories",
+      path: "/admin-setting/categories",
+      icon: <FaTable />,
+      isParent: false,
+    },
+    {
+      name: "Products",
+      path: "/admin-setting/products",
+      icon: <FaBox />,
+      isParent: false,
+    },
+    {
+      name: "Suppliers",
+      path: "/admin-setting/suppliers",
+      icon: <FaTruck />,
+      isParent: false,
+    },
+  ];
+
   const { user } = useAuth();
+  const location = useLocation();
   const [menuLinks, setMenuLinks] = useState(customerItem);
 
   useEffect(() => {
-    if (user && user.role === "admin") {
-      setMenuLinks(menuItems);
+    if (!user || user.role !== "admin") {
+      setMenuLinks(customerItem);
+      return;
     }
-  }, [user]);
+    if (
+      location &&
+      location.pathname &&
+      location.pathname.includes("admin-setting")
+    ) {
+      setMenuLinks(settingMenuItems);
+      return;
+    }
+
+    // Otherwise show the regular admin menu
+    setMenuLinks(menuItems);
+  }, [user, location.pathname]);
 
   return (
     <div className="flex flex-col h-screen bg-black text-white w-16 md:w-64 fixed">

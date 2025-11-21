@@ -13,12 +13,25 @@ import CustomerProducts from "./components/CustomerProducts";
 import Orders from "./components/Orders";
 import Profile from "./components/Profile";
 import Summary from "./components/Summary";
+import Setting from "./pages/Setting";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Root />} />
+        <Route
+          path="/admin-setting"
+          element={
+            <ProtectedRoutes requiredRole={["admin"]}>
+              <Setting />
+            </ProtectedRoutes>
+          }
+        >
+          <Route path="categories" element={<Categories />}></Route>
+          <Route path="products" element={<Products />}></Route>
+          <Route path="suppliers" element={<Suppliers />}></Route>
+        </Route>
         <Route
           path="/admin-dashboard"
           element={
@@ -28,9 +41,6 @@ function App() {
           }
         >
           <Route index element={<Summary />}></Route>
-          <Route path="categories" element={<Categories />}></Route>
-          <Route path="products" element={<Products />}></Route>
-          <Route path="suppliers" element={<Suppliers />}></Route>
           <Route path="orders" element={<Orders />}></Route>
           <Route path="users" element={<User />}></Route>
           <Route path="profile" element={<Profile />}></Route>
