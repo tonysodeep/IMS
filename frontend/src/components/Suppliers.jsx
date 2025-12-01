@@ -6,10 +6,10 @@ const Suppliers = () => {
   const [addEditSupplier, setAddEditSupplier] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    supplierName: "",
-    supplierEmail: "",
-    supplierPhoneNumber: "",
-    supplierAddress: "",
+    name: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -62,10 +62,10 @@ const Suppliers = () => {
         }
       } finally {
         setFormData({
-          supplierName: "",
-          supplierEmail: "",
-          supplierPhoneNumber: "",
-          supplierAddress: "",
+          name: "",
+          email: "",
+          phoneNumber: "",
+          address: "",
         });
       }
     } else {
@@ -98,10 +98,10 @@ const Suppliers = () => {
         }
       } finally {
         setFormData({
-          supplierName: "",
-          supplierEmail: "",
-          supplierPhoneNumber: "",
-          supplierAddress: "",
+          name: "",
+          email: "",
+          phoneNumber: "",
+          address: "",
         });
       }
     }
@@ -115,10 +115,10 @@ const Suppliers = () => {
 
   const handleEditSupplier = (supplier) => {
     setFormData({
-      supplierName: supplier.name,
-      supplierEmail: supplier.email,
-      supplierPhoneNumber: supplier.phoneNumber,
-      supplierAddress: supplier.address,
+      name: supplier.name || "",
+      email: supplier.email || "",
+      phoneNumber: supplier.phoneNumber || "",
+      address: supplier.address || "",
     });
     setAddEditSupplier(supplier._id);
     setIsEditMode(true);
@@ -133,19 +133,19 @@ const Suppliers = () => {
       case "close":
         setAddEditSupplier(null);
         setFormData({
-          supplierName: "",
-          supplierEmail: "",
-          supplierPhoneNumber: "",
-          supplierAddress: "",
+          name: "",
+          email: "",
+          phoneNumber: "",
+          address: "",
         });
         break;
       default:
         setAddEditSupplier(null);
         setFormData({
-          supplierName: "",
-          supplierEmail: "",
-          supplierPhoneNumber: "",
-          supplierAddress: "",
+          name: "",
+          email: "",
+          phoneNumber: "",
+          address: "",
         });
         break;
     }
@@ -276,33 +276,33 @@ const Suppliers = () => {
                 type="text"
                 placeholder="Supplier Name"
                 className="border p-1 bg-white rounded px-4"
-                name="supplierName"
+                name="name"
                 onChange={hanleChange}
-                value={formData.supplierName}
+                value={formData.name}
               />
               <input
                 type="email"
                 placeholder="Supplier Email"
                 className="border p-1 bg-white rounded px-4"
-                name="supplierEmail"
+                name="email"
                 onChange={hanleChange}
-                value={formData.supplierEmail}
+                value={formData.email}
               />
               <input
                 type="number"
                 placeholder="Supplier Phone Number"
                 className="border p-1 bg-white rounded px-4"
-                name="supplierPhoneNumber"
+                name="phoneNumber"
                 onChange={hanleChange}
-                value={formData.supplierPhoneNumber}
+                value={formData.phoneNumber}
               />
               <input
                 type="text"
                 placeholder="Supplier address"
                 className="border p-1 bg-white rounded px-4"
-                name="supplierAddress"
+                name="address"
                 onChange={hanleChange}
-                value={formData.supplierAddress}
+                value={formData.address}
               />
               {isEditMode ? (
                 <div className="flex space-x-2">

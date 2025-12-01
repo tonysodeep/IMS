@@ -1,16 +1,11 @@
-import ProductModel from "../models/Product.js";
+import ItemModel from "../models/Item.js";
 import SupplierModel from "../models/Supplier.js";
 
 const addSupplier = async (req, res) => {
   try {
-    const {
-      supplierName,
-      supplierEmail,
-      supplierPhoneNumber,
-      supplierAddress,
-    } = req.body;
+    const { name, email, phoneNumber, address } = req.body;
     // console.log(` respone body ${JSON.stringify(req.body)}`);
-    const existingSupplier = await SupplierModel.findOne({ supplierName });
+    const existingSupplier = await SupplierModel.findOne({ name });
     if (existingSupplier) {
       return res.status(200).json({
         success: false,
@@ -18,10 +13,10 @@ const addSupplier = async (req, res) => {
       });
     }
     const newSupplier = new SupplierModel({
-      name: supplierName,
-      email: supplierEmail,
-      phoneNumber: supplierPhoneNumber,
-      address: supplierAddress,
+      name,
+      email,
+      phoneNumber,
+      address,
     });
     await newSupplier.save();
     return res.status(201).json({
@@ -53,12 +48,7 @@ const getSuppliers = async (req, res) => {
 const updateSupplier = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      supplierName,
-      supplierEmail,
-      supplierPhoneNumber,
-      supplierAddress,
-    } = req.body;
+    const { name, email, phoneNumber, address } = req.body;
     const existingSupplier = await SupplierModel.findById(id);
     if (!existingSupplier) {
       return res.status(404).json({
@@ -69,10 +59,10 @@ const updateSupplier = async (req, res) => {
     const updatedSupplier = await SupplierModel.findByIdAndUpdate(
       id,
       {
-        name: supplierName,
-        email: supplierEmail,
-        phoneNumber: supplierPhoneNumber,
-        address: supplierAddress,
+        name,
+        email,
+        phoneNumber,
+        address,
       },
       { new: true }
     );
@@ -92,9 +82,9 @@ const updateSupplier = async (req, res) => {
 const deleteSupplier = async (req, res) => {
   try {
     const { id } = req.params;
-    const countProduct = await ProductModel.countDocuments({ supplier: id });
+    const countSupplier = await ItemModel.countDocuments({ supplierId: id });
 
-    if (countProduct > 0) {
+    if (countSupplier > 0) {
       return res.status(202).json({
         success: false,
         message: "Can not delete Supplier assosiated with products",

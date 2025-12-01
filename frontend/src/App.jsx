@@ -6,7 +6,7 @@ import ProtectedRoutes from "./ultis/ProtectedRoutes";
 import Dashboard from "./pages/Dashboard";
 import Categories from "./components/Categories";
 import Suppliers from "./components/Suppliers";
-import Products from "./components/Products";
+import Items from "./components/Item";
 import Logout from "./components/Logout";
 import User from "./components/User";
 import CustomerProducts from "./components/CustomerProducts";
@@ -29,7 +29,7 @@ function App() {
           }
         >
           <Route path="categories" element={<Categories />}></Route>
-          <Route path="products" element={<Products />}></Route>
+          <Route path="items" element={<Items />}></Route>
           <Route path="suppliers" element={<Suppliers />}></Route>
         </Route>
         <Route

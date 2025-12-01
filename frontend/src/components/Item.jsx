@@ -1,39 +1,41 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { useData } from "../context/DataContext";
 
-const Products = () => {
+const Items = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [editProduct, setEditProduct] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [editItem, setEditItem] = useState(null);
+
+  const { categories, suppliers } = useData();
+  const [items, setItems] = useState([]);
   const [formData, setFormData] = useState({
-    productName: "",
-    productDescription: "",
-    productPrice: "",
-    productStock: "",
-    category: "",
-    supplier: "",
+    code: "",
+    name: "",
+    type: "",
+    defaultUnit: "",
+    categoryId: "",
+    supplierId: "",
   });
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredProducts = useMemo(() => {
+  const filteredItems = useMemo(() => {
     const term = (searchTerm || "").trim().toLowerCase();
-    if (!term) return products;
-    return products.filter((s) => (s.name || "").toLowerCase().includes(term));
-  }, [products, searchTerm]);
+    if (!term) return items;
+    return items.filter((s) => (s.name || "").toLowerCase().includes(term));
+  }, [items, searchTerm]);
 
-  const fetchProducts = async () => {
+  const fetchItems = async () => {
     try {
-      const respone = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/product/`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
-        },
-      });
+      const respone = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/item/`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+          },
+        }
+      );
       if (respone.data.success) {
-        setCategories(respone.data.categories);
-        setSuppliers(respone.data.suppliers);
-        setProducts(respone.data.products);
+        setItems(respone.data.items);
       } else {
         alert(respone.data.message);
       }
@@ -47,24 +49,24 @@ const Products = () => {
       } else {
         alert("Internal server error");
       }
-      console.error("Error fetching products:", error);
+      console.error("Error fetching Items:", error);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchItems();
+  }, [items]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setEditProduct(null);
+    setEditItem(null);
     setFormData({
-      productName: "",
-      productDescription: "",
-      productPrice: "",
-      productStock: "",
-      category: "",
-      supplier: "",
+      code: "",
+      name: "",
+      type: "",
+      defaultUnit: "",
+      categoryId: "",
+      supplierId: "",
     });
   };
 
@@ -74,10 +76,10 @@ const Products = () => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    if (editProduct) {
+    if (editItem) {
       try {
         const respone = await axios.put(
-          `http://localhost:25569/api/product/${editProduct}`,
+          `http://localhost:25569/api/Item/${editItem}`,
           formData,
           {
             headers: {
@@ -88,16 +90,16 @@ const Products = () => {
         if (respone.data.success) {
           alert(respone.data.message);
           setFormData({
-            productName: "",
-            productDescription: "",
-            productPrice: "",
-            productStock: "",
-            category: "",
-            supplier: "",
+            code: "",
+            name: "",
+            type: "",
+            defaultUnit: "",
+            categoryId: "",
+            supplierId: "",
           });
           setOpenModal(false);
-          setEditProduct(null);
-          fetchProducts();
+          setEditItem(null);
+          fetchItems();
         } else {
           alert(respone.data.message);
         }
@@ -115,7 +117,7 @@ const Products = () => {
     } else {
       try {
         const respone = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/api/product/add`,
+          `${import.meta.env.VITE_BASE_URL}/api/item/add`,
           formData,
           {
             headers: {
@@ -126,15 +128,15 @@ const Products = () => {
         if (respone.data.success) {
           alert(respone.data.message);
           setFormData({
-            productName: "",
-            productDescription: "",
-            productPrice: "",
-            productStock: "",
-            category: "",
-            supplier: "",
+            code: "",
+            name: "",
+            type: "",
+            defaultUnit: "",
+            categoryId: "",
+            supplierId: "",
           });
           setOpenModal(false);
-          fetchProducts();
+          fetchItems();
         } else {
           alert(respone.data.message);
         }
@@ -152,24 +154,24 @@ const Products = () => {
     }
   };
 
-  const handleEdit = (product) => {
+  const handleEdit = (item) => {
     setOpenModal(true);
-    setEditProduct(product._id);
+    setEditItem(item._id);
     setFormData({
-      productName: product.name,
-      productDescription: product.description,
-      productPrice: product.price,
-      productStock: product.stock,
-      category: product.category._id,
-      supplier: product.supplier._id,
+      code: "",
+      name: "",
+      type: "",
+      defaultUnit: "",
+      categoryId: "",
+      supplierId: "",
     });
   };
 
-  const handleDelete = async (productId) => {
-    if (window.confirm("Are you sure you want to delete this Product?")) {
+  const handleDelete = async (itemId) => {
+    if (window.confirm("Are you sure you want to delete this Item?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:25569/api/product/${productId}`,
+          `http://localhost:25569/api/Item/${itemId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
@@ -178,7 +180,7 @@ const Products = () => {
         );
         if (response.data.success) {
           alert(response.data.message);
-          fetchProducts();
+          fetchItems();
         } else {
           alert(response.data.message);
         }
@@ -194,11 +196,11 @@ const Products = () => {
 
   return (
     <div className="w-full h-full flex flex-col gap-4 p-4">
-      <h1 className="text-2xl font-bold">Products Management</h1>
+      <h1 className="text-2xl font-bold">Items Management</h1>
       <div className="flex justify-between items-center">
         <input
           type="text"
-          placeholder="Search Product..."
+          placeholder="Search Item..."
           value={searchTerm}
           className="border p-1 bg-white rounded px-4"
           name="searchTerm"
@@ -212,7 +214,7 @@ const Products = () => {
             setOpenModal(true);
           }}
         >
-          Add Product
+          Add Item
         </button>
       </div>
       <div>
@@ -220,51 +222,40 @@ const Products = () => {
           <thead>
             <tr className="bg-gray-200">
               <th className="border border-gray-300 p-2">S NO</th>
-              <th className="border border-gray-300 p-2">Product Name</th>
+              <th className="border border-gray-300 p-2">Item Code</th>
+              <th className="border border-gray-300 p-2">Item Name</th>
+              <th className="border border-gray-300 p-2">Item Type</th>
+              <th className="border border-gray-300 p-2">Item Default Unit</th>
               <th className="border border-gray-300 p-2">Category Name</th>
               <th className="border border-gray-300 p-2">Supplier Name</th>
-              <th className="border border-gray-300 p-2">Price</th>
-              <th className="border border-gray-300 p-2">Stock</th>
-              <th className="border border-gray-300 p-2">Action</th>
+              <th className="border border-gray-300 p-2">Create At</th>
             </tr>
           </thead>
           <tbody>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
-                <tr key={product._id || index}>
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item, index) => (
+                <tr key={item._id || index}>
                   <td className="border border-gray-300 p-2">{index + 1}</td>
-                  <td className="border border-gray-300 p-2">{product.name}</td>
+                  <td className="border border-gray-300 p-2">{item.code}</td>
+                  <td className="border border-gray-300 p-2">{item.name}</td>
+                  <td className="border border-gray-300 p-2">{item.type}</td>
                   <td className="border border-gray-300 p-2">
-                    {product.category.categoryName}
+                    {item.defaultUnit}
                   </td>
                   <td className="border border-gray-300 p-2">
-                    {product.supplier.name}
+                    {item.categoryName}
                   </td>
                   <td className="border border-gray-300 p-2">
-                    {product.price}
+                    {item.supplierName}
                   </td>
                   <td className="border border-gray-300 p-2">
-                    <span className="rounded-full font-semibold">
-                      {product.stock === 0 ? (
-                        <span className="bg-red-100 text-red-500 px-2 py-1 rounded-full">
-                          Out of Stock
-                        </span>
-                      ) : product.stock <= 5 ? (
-                        <span className="bg-yellow-100 text-yellow-500 px-2 py-1 rounded-full">
-                          {product.stock}
-                        </span>
-                      ) : (
-                        <span className="bg-green-100 text-green-500 px-2 py-1 rounded-full">
-                          {product.stock}
-                        </span>
-                      )}
-                    </span>
+                    {item.createdAt}
                   </td>
                   <td className="border border-gray-300 p-2 flex gap-2 justify-center">
                     <button
                       className="px-2 py-1 bg-yellow-500 text-white rounded cursor-pointer"
                       onClick={() => {
-                        handleEdit(product);
+                        handleEdit(item);
                       }}
                     >
                       Edit
@@ -272,7 +263,7 @@ const Products = () => {
                     <button
                       className="px-2 py-1 bg-red-500 text-white rounded cursor-pointer"
                       onClick={() => {
-                        handleDelete(product._id);
+                        handleDelete(item._id);
                       }}
                     >
                       Delete
@@ -286,7 +277,7 @@ const Products = () => {
                   className="border border-gray-300 p-2 text-center"
                   colSpan={6}
                 >
-                  No Product found
+                  No Item found
                 </td>
               </tr>
             )}
@@ -296,7 +287,7 @@ const Products = () => {
       {openModal && (
         <div className=" fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center">
           <div className="bg-white p-4 rounded shadow-md w-1/3 relative">
-            <h1 className="text-xl font-bold">Add Product</h1>
+            <h1 className="text-xl font-bold">Add Item</h1>
             <button
               className="absolute top-4 right-4 font-bold text-lg cursor-pointer"
               onClick={handleCloseModal}
@@ -306,43 +297,42 @@ const Products = () => {
             <form className="flex flex-col gap-4 mt-4" onSubmit={handelSubmit}>
               <input
                 type="text"
-                placeholder="Product Name"
+                placeholder="Item Code"
                 className="border p-1 bg-white rounded px-4"
-                name="productName"
+                name="code"
                 onChange={handleChange}
-                value={formData.productName}
+                value={formData.code}
               />
               <input
                 type="text"
-                placeholder="Product Description"
+                placeholder="Item Name"
                 className="border p-1 bg-white rounded px-4"
-                name="productDescription"
+                name="name"
                 onChange={handleChange}
-                value={formData.productDescription}
+                value={formData.name}
               />
               <input
-                type="number"
-                placeholder="Product Price"
+                type="text"
+                placeholder="Item Type"
                 className="border p-1 bg-white rounded px-4"
-                name="productPrice"
+                name="type"
                 onChange={handleChange}
-                value={formData.productPrice}
+                value={formData.type}
               />
               <input
-                type="number"
-                placeholder="Stock Quantity"
+                type="text"
+                placeholder="Item Default Unit"
                 className="border p-1 bg-white rounded px-4"
-                name="productStock"
-                min="0"
+                name="defaultUnit"
                 onChange={handleChange}
-                value={formData.productStock}
+                value={formData.defaultUnit}
               />
               <div className="w-full border">
                 <select
-                  name="category"
+                  name="categoryId"
                   className="w-full p-2"
                   onChange={handleChange}
-                  value={formData.category}
+                  value={formData.categoryId}
                 >
                   <option value="">Select Category</option>
                   {categories &&
@@ -355,10 +345,10 @@ const Products = () => {
               </div>
               <div className="w-full border">
                 <select
-                  name="supplier"
+                  name="supplierId"
                   className="w-full p-2"
                   onChange={handleChange}
-                  value={formData.supplier}
+                  value={formData.supplierId}
                 >
                   <option value="">Select Supplier</option>
                   {suppliers &&
@@ -369,13 +359,13 @@ const Products = () => {
                     ))}
                 </select>
               </div>
-              {editProduct ? (
+              {editItem ? (
                 <button className="w-full mt-2 bg-yellow-500 text-white rounded-md p-3 cursor-pointer hover:bg-amber-300">
                   Save Changes
                 </button>
               ) : (
                 <button className="w-full mt-2 bg-blue-500 text-white rounded-md p-3 cursor-pointer hover:bg-blue-300">
-                  Add Product
+                  Add Item
                 </button>
               )}
             </form>
@@ -386,4 +376,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Items;

@@ -1,10 +1,10 @@
 import OrderModel from "../models/Order.js";
-import ProductModel from "../models/Product.js";
+import ItemModel from "../models/Item.js";
 
 const getDashboardData = async (req, res) => {
   try {
-    const totalProducts = await ProductModel.countDocuments();
-    const stockResult = await ProductModel.aggregate([
+    const totalProducts = await ItemModel.countDocuments();
+    const stockResult = await ItemModel.aggregate([
       { $group: { _id: null, totalStock: { $sum: "$stock" } } },
     ]);
     // console.log(`stockResult aggregate ${JSON.stringify(stockResult)}`);
@@ -24,7 +24,7 @@ const getDashboardData = async (req, res) => {
     ]);
     const revenue = revenueResult[0]?.totalRevenue || 0;
 
-    const outOfStock = await ProductModel.find({ stock: 0 })
+    const outOfStock = await ItemModel.find({ stock: 0 })
       .select("name stock")
       .populate("category", "categoryName");
 
@@ -65,7 +65,7 @@ const getDashboardData = async (req, res) => {
       message: "No sale data avaible",
     };
 
-    const lowStock = await ProductModel.find({ stock: { $gt: 0, $lt: 5 } })
+    const lowStock = await ItemModel.find({ stock: { $gt: 0, $lt: 5 } })
       .select("name stock")
       .populate("category", "categoryName");
 

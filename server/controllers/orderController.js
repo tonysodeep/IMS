@@ -1,11 +1,11 @@
 import OrderModel from "../models/Order.js";
-import ProductModel from "../models/Product.js";
+import ItemModel from "../models/Item.js";
 
 const addOrder = async (req, res) => {
   try {
     const { productId, quantity, total } = req.body;
     const userId = req.user._id;
-    const product = await ProductModel.findById({ _id: productId });
+    const product = await ItemModel.findById({ _id: productId });
     if (!product) {
       return res.status(404).json({
         success: false,

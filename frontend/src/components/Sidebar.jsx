@@ -87,8 +87,8 @@ const Sidebar = () => {
       isParent: false,
     },
     {
-      name: "Products",
-      path: "/admin-setting/products",
+      name: "Items",
+      path: "/admin-setting/items",
       icon: <FaBox />,
       isParent: false,
     },

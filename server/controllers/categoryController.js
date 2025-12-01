@@ -1,5 +1,5 @@
 import CategoryModel from "../models/Category.js";
-import ProductModel from "../models/Product.js";
+import ItemModel from "../models/Item.js";
 
 const addCategory = async (req, res) => {
   try {
@@ -75,8 +75,8 @@ const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const countProduct = await ProductModel.countDocuments({ category: id });
-    if (countProduct > 0) {
+    const countItem = await ItemModel.countDocuments({ categoryId: id });
+    if (countItem > 0) {
       return res.status(202).json({
         success: false,
         message: "Can not delete category assosiated with products",
